@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VitaminLab | Витамины</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Inter", sans-serif;
+            background: #0b0f14;
+            color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           LANGUAGE
+        ========================= */
+
+        .language-switcher {
+            position: fixed;
+            top: 18px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 7px;
+            padding: 7px;
+            background: rgba(20, 25, 32, 0.92);
+            border: 1px solid #303944;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+        }
+
+        .lang-btn {
+            border: none;
+            background: transparent;
+            color: #9ca3af;
+            padding: 7px 9px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: .25s;
+        }
+
+        .lang-btn:hover,
+        .lang-btn.active {
+            background: #29313b;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .vitamin-sidebar {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .vitamin-pill {
+            width: 66px;
+            height: 66px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, .2);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 23px;
+            font-weight: 900;
+            color: #171717;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .25);
+            transition:
+                transform .7s cubic-bezier(.2, .8, .2, 1),
+                box-shadow .3s,
+                filter .3s;
+        }
+
+        .vitamin-pill:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 35px rgba(255, 255, 255, .15);
+            filter: brightness(1.1);
+        }
+
+        .vitamin-pill.rotate {
+            animation: rotateVitamin .75s ease-in-out;
+        }
+
+        @keyframes rotateVitamin {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+
+        .vitamin-a {
+            background: #f4d7ad;
+        }
+
+        .vitamin-b {
+            background: #e7b9a8;
+        }
+
+        .vitamin-c {
+            background: #f5df9a;
+        }
+
+        .vitamin-d {
+            background: #f7cf76;
+        }
+
+        .vitamin-e {
+            background: #b9d4b4;
+        }
+
+        .vitamin-k {
+            background: #a9d8d0;
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .top-nav {
+            position: fixed;
+            left: 50%;
+            top: 18px;
+            transform: translateX(-50%);
+            z-index: 900;
+
+            display: flex;
+            gap: 5px;
+            padding: 7px;
+
+            background: rgba(20, 25, 32, .9);
+            border: 1px solid #303944;
+            border-radius: 18px;
+
+            backdrop-filter: blur(15px);
+        }
+
+        .nav-btn {
+            border: none;
+            color: #9ca3af;
+            background: transparent;
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: .25s;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: #29313b;
+            color: white;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        main {
+            margin-left: 110px;
+            padding: 110px 50px 60px;
+            max-width: 1500px;
+            margin-right: auto;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn .4s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            min-height: 530px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            padding: 60px 30px;
+
+            border: 1px solid #29313b;
+            border-radius: 35px;
+
+            background:
+                radial-gradient(circle at 50% 20%, rgba(120, 150, 180, .12), transparent 35%),
+                linear-gradient(145deg, #111720, #0c1016);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #18202a;
+            border: 1px solid #303944;
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 7vw, 90px);
+            line-height: .95;
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: -4px;
+        }
+
+        .hero h1 span {
+            color: #a7f3d0;
+        }
+
+        .hero p {
+            max-width: 750px;
+            color: #9ca3af;
+            line-height: 1.7;
+            font-size: 17px;
+            margin-top: 25px;
+        }
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .section-title {
+            font-size: 34px;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            color: #8d98a6;
+            margin-bottom: 30px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #111720;
+            border: 1px solid #29313b;
+            border-radius: 24px;
+            padding: 25px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .card p {
+            color: #a8b0bb;
+            line-height: 1.7;
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #202934;
+            margin-bottom: 16px;
+        }
+
+        /* =========================
+           VITAMIN PAGE
+        ========================= */
+
+        .vitamin-header {
+            border-radius: 30px;
+            padding: 40px;
+            color: #171717;
+            margin-bottom: 22px;
+            min-height: 230px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .vitamin-symbol {
+            width: 130px;
+            height: 130px;
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 35px;
+            background: rgba(255, 255, 255, .32);
+            border: 2px solid rgba(0, 0, 0, .15);
+
+            font-size: 62px;
+            font-weight: 900;
+
+            box-shadow: inset 0 0 25px rgba(255, 255, 255, .2);
+        }
+
+        .vitamin-title {
+            font-size: clamp(38px, 5vw, 65px);
+            font-weight: 900;
+            margin: 0 0 8px;
+            letter-spacing: -2px;
+        }
+
+        .vitamin-subtitle {
+            font-size: 17px;
+            opacity: .72;
+            margin: 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .info-card {
+            background: #111720;
+            border: 1px solid #29313b;
+            border-radius: 24px;
+            padding: 25px;
+        }
+
+        .info-card h3 {
+            margin: 0 0 13px;
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .info-card p {
+            color: #aeb6c1;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        .back-button {
+            border: none;
+            background: #202934;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .back-button:hover {
+            background: #303b48;
+        }
+
+        /* =========================
+           CLASSIFICATION
+        ========================= */
+
+        .type-box {
+            padding: 28px;
+            border-radius: 25px;
+            background: linear-gradient(145deg, #121a23, #0e131a);
+            border: 1px solid #29313b;
+            margin-bottom: 20px;
+        }
+
+        .type-label {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 9px;
+            background: #202934;
+            color: #a7f3d0;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        /* =========================
+           QUIZ
+        ========================= */
+
+        .quiz-box {
+            max-width: 850px;
+            margin: auto;
+            background: #111720;
+            border: 1px solid #29313b;
+            border-radius: 30px;
+            padding: 35px;
+        }
+
+        .question-number {
+            color: #a7f3d0;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .question {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.4;
+            margin-bottom: 25px;
+        }
+
+        .answer {
+            width: 100%;
+            text-align: left;
+            padding: 17px 18px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            border: 1px solid #303944;
+            background: #171e27;
+            color: #e5e7eb;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .answer:hover {
+            background: #222c38;
+            border-color: #566372;
+        }
+
+        .answer.correct {
+            background: #173a2b;
+            border-color: #43c98b;
+        }
+
+        .answer.wrong {
+            background: #3a2024;
+            border-color: #e45d69;
+        }
+
+        .next-btn,
+        .restart-btn {
+            border: none;
+            background: #d1fae5;
+            color: #0b0f14;
+            font-weight: 900;
+            padding: 13px 22px;
+            border-radius: 13px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .next-btn:hover,
+        .restart-btn:hover {
+            filter: brightness(1.08);
+        }
+
+        .result {
+            text-align: center;
+        }
+
+        .result-score {
+            font-size: 70px;
+            font-weight: 900;
+            margin: 15px 0;
+            color: #a7f3d0;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .top-nav {
+                top: 75px;
+                max-width: calc(100% - 30px);
+                overflow-x: auto;
+            }
+
+            .language-switcher {
+                top: 15px;
+            }
+
+            .vitamin-sidebar {
+                left: 8px;
+                gap: 7px;
+            }
+
+            .vitamin-pill {
+                width: 48px;
+                height: 48px;
+                font-size: 17px;
+            }
+
+            main {
+                margin-left: 70px;
+                padding: 145px 18px 40px;
+            }
+
+            .card-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vitamin-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .vitamin-sidebar {
+                position: fixed;
+                top: auto;
+                bottom: 12px;
+                left: 50%;
+                transform: translateX(-50%);
+                flex-direction: row;
+                background: rgba(15, 20, 27, .94);
+                padding: 8px;
+                border-radius: 20px;
+                border: 1px solid #303944;
+            }
+
+            .vitamin-pill {
+                width: 43px;
+                height: 43px;
+            }
+
+            main {
+                margin-left: 0;
+                padding: 140px 12px 90px;
+            }
+
+            .hero {
+                min-height: 450px;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .vitamin-header {
+                padding: 28px 20px;
+            }
+
+            .vitamin-symbol {
+                width: 100px;
+                height: 100px;
+                font-size: 50px;
+            }
+
+            .quiz-box {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+     LANGUAGE SWITCHER
+========================= -->
+
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="hy">🇦🇲</button>
+        <button class="lang-btn" data-lang="ru">🇷🇺</button>
+        <button class="lang-btn" data-lang="en">🇬🇧</button>
+    </div>
+
+
+    <!-- =========================
+     NAVIGATION
+========================= -->
+
+    <nav class="top-nav">
+
+        <button class="nav-btn active" onclick="showPage('home', this)">
+            <i class="fa-solid fa-house"></i>
+            <span data-i18n="navHome">Գլխավոր</span>
+        </button>
+
+        <button class="nav-btn" onclick="showPage('about', this)">
+            <i class="fa-solid fa-flask"></i>
+            <span data-i18n="navAbout">Վիտամիններ</span>
+        </button>
+
+        <button class="nav-btn" onclick="showPage('quiz', this)">
+            <i class="fa-solid fa-circle-question"></i>
+            <span data-i18n="navQuiz">Թեստ</span>
+        </button>
+
+    </nav>
+
+
+    <!-- =========================
+     VITAMIN SIDEBAR
+========================= -->
+
+    <div class="vitamin-sidebar">
+
+        <button class="vitamin-pill vitamin-a" onclick="openVitamin('a', this)">A</button>
+
+        <button class="vitamin-pill vitamin-b" onclick="openVitamin('b', this)">B</button>
+
+        <button class="vitamin-pill vitamin-c" onclick="openVitamin('c', this)">C</button>
+
+        <button class="vitamin-pill vitamin-d" onclick="openVitamin('d', this)">D</button>
+
+        <button class="vitamin-pill vitamin-e" onclick="openVitamin('e', this)">E</button>
+
+        <button class="vitamin-pill vitamin-k" onclick="openVitamin('k', this)">K</button>
+
+    </div>
+
+
+    <main>
+
+        <!-- =========================
+     HOME
+========================= -->
+
+        <section id="home" class="page active">
+
+            <div class="hero">
+
+                <div class="hero-badge">
+                    <i class="fa-solid fa-microscope"></i>
+                    <span data-i18n="badge">
+                        Ակադեմիական 100/100 Նախագիծ
+                    </span>
+                </div>
+
+                <h1>
+                    Vitamin<span>Lab</span>
+                </h1>
+
+                <p data-i18n="homeDescription">
+                    Ինտերակտիվ կրթական կայք վիտամինների կառուցվածքի,
+                    դասակարգման, նշանակության և մարդու օրգանիզմում դերի մասին։
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+     ABOUT
+========================= -->
+
+        <section id="about" class="page">
+
+            <h2 class="section-title" data-i18n="aboutTitle">
+                Վիտամիններ
+            </h2>
+
+            <p class="section-subtitle" data-i18n="aboutSubtitle">
+                Հիմնական տեղեկություններ վիտամինների մասին
+            </p>
+
+
+            <div class="card-grid">
+
+                <div class="card">
+
+                    <div class="icon-box">
+                        <i class="fa-solid fa-flask"></i>
+                    </div>
+
+                    <h3 data-i18n="theoryTitle">
+                        Ի՞նչ են վիտամինները
+                    </h3>
+
+                    <p data-i18n="theoryText">
+                        Վիտամինները տարբեր կառուցվածք ունեցող օրգանական,
+                        չափերով փոքր և անկայուն միացություններ են։
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon-box">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+
+                    <h3 data-i18n="historyTitle">
+                        Պատմություն
+                    </h3>
+
+                    <p data-i18n="historyText">
+                        Վիտամինները հայտնաբերվել են 19-րդ դարում ռուս բժիշկ
+                        Ն.Ի. Լունինի կողմից, իսկ «վիտամիններ» անվանումը
+                        առաջարկել է Կ. Ֆունկը։
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon-box">
+                        <i class="fa-solid fa-droplet"></i>
+                    </div>
+
+                    <h3 data-i18n="waterTitle">
+                        Ջրալույծ վիտամիններ
+                    </h3>
+
+                    <p data-i18n="waterText">
+                        B խմբի վիտամինները և C վիտամինը ջրալույծ են։
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon-box">
+                        <i class="fa-solid fa-oil-well"></i>
+                    </div>
+
+                    <h3 data-i18n="fatTitle">
+                        Ճարպալույծ վիտամիններ
+                    </h3>
+
+                    <p data-i18n="fatText">
+                        A, D, E և K վիտամինները ճարպալույծ են։
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div style="height:20px;"></div>
+
+
+            <div class="type-box">
+
+                <span class="type-label" data-i18n="roleLabel">
+                    ԴԵՐԸ
+                </span>
+
+                <h3 data-i18n="roleTitle">
+                    Վիտամինների նշանակությունը
+                </h3>
+
+                <p data-i18n="roleText">
+                    Վիտամինները շատ փոքր քանակներով մասնակցում են
+                    ածխաջրերի, լիպիդների և այլ նյութերի փոխանակությանը,
+                    տարբեր նյութերի փոխադրմանը, մտնում են որոշ սպիտակուցների,
+                    այդ թվում՝ ֆերմենտների կամ հորմոնների կազմության մեջ։
+                </p>
+
+            </div>
+
+
+            <div class="type-box">
+
+                <span class="type-label" data-i18n="deficiencyLabel">
+                    ՊԱԿԱՍ
+                </span>
+
+                <h3 data-i18n="deficiencyTitle">
+                    Վիտամինների պակաս
+                </h3>
+
+                <p data-i18n="deficiencyText">
+                    Վիտամինների պակասի դեպքում կարող են զարգանալ
+                    տարբեր հիվանդություններ՝ լնդախտ, հավկուրություն,
+                    բերիբերի, ռախիտ և այլն։
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+     VITAMIN PAGE
+========================= -->
+
+        <section id="vitaminPage" class="page">
+
+            <button class="back-button" onclick="showPage('home')">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span data-i18n="back">Հետ</span>
+            </button>
+
+            <div id="vitaminContent"></div>
+
+        </section>
+
+
+        <!-- =========================
+     QUIZ
+========================= -->
+
+        <section id="quiz" class="page">
+
+            <h2 class="section-title" data-i18n="quizTitle">
+                Վիտամինների թեստ
+            </h2>
+
+            <p class="section-subtitle" data-i18n="quizSubtitle">
+                Ստուգիր քո գիտելիքները
+            </p>
+
+            <div class="quiz-box" id="quizBox"></div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        /* =========================================================
+           TRANSLATIONS
+        ========================================================= */
+
+        const translations = {
+
+            hy: {
+
+                navHome: "Գլխավոր",
+                navAbout: "Վիտամիններ",
+                navQuiz: "Թեստ",
+
+                badge: "Ակադեմիական 100/100 Նախագիծ",
+
+                homeDescription:
+                    "Ինտերակտիվ կրթական կայք վիտամինների կառուցվածքի, դասակարգման, նշանակության և մարդու օրգանիզմում դերի մասին։",
+
+                aboutTitle: "Վիտամիններ",
+
+                aboutSubtitle:
+                    "Հիմնական տեղեկություններ վիտամինների մասին",
+
+                theoryTitle: "Ի՞նչ են վիտամինները",
+
+                theoryText:
+                    "Վիտամինները տարբեր կառուցվածք ունեցող օրգանական, չափերով փոքր և անկայուն միացություններ են։",
+
+                historyTitle: "Պատմություն",
+
+                historyText:
+                    "Վիտամինները հայտնաբերվել են 19-րդ դարում ռուս բժիշկ Ն.Ի. Լունինի կողմից, իսկ «վիտամիններ» անվանումը առաջարկել է Կ. Ֆունկը։",
+
+                waterTitle: "Ջրալույծ վիտամիններ",
+
+                waterText:
+                    "B խմբի վիտամինները և C վիտամինը ջրալույծ են։",
+
+                fatTitle: "Ճարպալույծ վիտամիններ",
+
+                fatText:
+                    "A, D, E և K վիտամինները ճարպալույծ են։",
+
+                roleLabel: "ԴԵՐԸ",
+
+                roleTitle: "Վիտամինների նշանակությունը",
+
+                roleText:
+                    "Վիտամինները շատ փոքր քանակներով մասնակցում են ածխաջրերի, լիպիդների և այլ նյութերի փոխանակությանը, տարբեր նյութերի փոխադրմանը, մտնում են որոշ սպիտակուցների, այդ թվում՝ ֆերմենտների կամ հորմոնների կազմության մեջ։",
+
+                deficiencyLabel: "ՊԱԿԱՍ",
+
+                deficiencyTitle: "Վիտամինների պակաս",
+
+                deficiencyText:
+                    "Վիտամինների պակասի դեպքում կարող են զարգանալ տարբեր հիվանդություններ՝ լնդախտ, հավկուրություն, բերիբերի, ռախիտ և այլն։",
+
+                back: "Հետ",
+
+                function: "Գործառույթ",
+
+                sources: "Աղբյուրներ",
+
+                deficiency: "Պակաս",
+
+                important: "Կարևոր է",
+
+                quizTitle: "Վիտամինների թեստ",
+
+                quizSubtitle: "Ստուգիր քո գիտելիքները",
+
+                next: "Հաջորդ հարց",
+
+                result: "Արդյունք",
+
+                restart: "Կրկին սկսել",
+
+                correct: "Ճիշտ",
+
+                wrong: "Սխալ",
+
+                scoreText: "Դու հավաքեցիր",
+
+                of: "15-ից",
+
+                questions: [
+
+                    {
+                        q: "Ո՞վ է հայտնաբերել վիտամինները։",
+                        a: ["Ն.Ի. Լունինը", "Կ. Ֆունկը", "Ռոբերտ Հուկը"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Ո՞վ է առաջարկել «վիտամիններ» անվանումը։",
+                        a: ["Ն.Ի. Լունինը", "Կ. Ֆունկը", "Լևենհուկը"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Ո՞ր վիտամինն է ջրալույծ։",
+                        a: ["A", "C", "D"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Ո՞ր խմբին են պատկանում A, D, E և K վիտամինները։",
+                        a: ["Ջրալույծ", "Ճարպալույծ", "Հանքային"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Վիտամինները մասնակցում են նյութափոխանակությանը։",
+                        a: ["Այո", "Ոչ", "Միայն D վիտամինը"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Ո՞ր վիտամինն է կապված լնդախտի կանխարգելման հետ։",
+                        a: ["C", "D", "K"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Ո՞ր վիտամինն է կարևոր արյան մակարդման համար։",
+                        a: ["A", "K", "E"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Ո՞ր վիտամինն է կարևոր ոսկրերի համար։",
+                        a: ["D", "C", "K"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Վիտամինները էներգիայի հիմնական աղբյուր են։",
+                        a: ["Այո", "Ոչ", "Միայն B վիտամինները"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Որտեղի՞ց է մարդը ստանում շատ վիտամիններ։",
+                        a: ["Սննդից", "Միայն ջրից", "Միայն օդից"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Ո՞ր վիտամիններն են պատկանում B խմբին։",
+                        a: ["B1, B2, B6, B12", "A1, A2", "D1, D2"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Վիտամինների պակասը կարող է առաջացնել հիվանդություններ։",
+                        a: ["Այո", "Ոչ", "Միայն երեխաների մոտ"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Ո՞ր հիվանդությունն է կապված D վիտամինի պակասի հետ։",
+                        a: ["Ռախիտ", "Լնդախտ", "Բերիբերի"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Վիտամինները մասնակցում են մարդու աճին։",
+                        a: ["Այո", "Ոչ", "Միայն C-ն"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Վիտամինները պետք են շատ փոքր քանակներով։",
+                        a: ["Այո", "Ոչ", "Միայն A-ն"],
+                        c: 0
+                    }
+                ],
+
+                vitamins: {
+
+                    a: {
+                        title: "Վիտամին A",
+                        subtitle: "Տեսողություն • Աճ • Մաշկ",
+                        function: "Աջակցում է նորմալ տեսողությանը, աճին և մաշկի առողջությանը։",
+                        sources: "Գազար, դդում, ձու, կաթնամթերք, լյարդ, կանաչ բանջարեղեն։",
+                        deficiency: "Պակասի դեպքում կարող են առաջանալ տեսողության խնդիրներ, հատկապես թույլ լուսավորության պայմաններում։",
+                        important: "Ճարպալույծ վիտամին է։"
+                    },
+
+                    b: {
+                        title: "Վիտամին B",
+                        subtitle: "Նյութափոխանակություն • Նյարդային համակարգ • Արյուն",
+                        function: "B խմբի վիտամինները մասնակցում են նյութափոխանակությանը, աջակցում նյարդային համակարգի աշխատանքին և արյունաստեղծմանը։",
+                        sources: "Միս, ձուկ, ձու, կաթնամթերք, ամբողջական հացահատիկներ, լոբազգիներ և ընկույզներ։",
+                        deficiency: "Պակասի հետևանքները կախված են կոնկրետ B վիտամինից և կարող են ազդել նյութափոխանակության, նյարդային համակարգի կամ արյունաստեղծման վրա։",
+                        important: "B խմբի վիտամինները ջրալույծ են։"
+                    },
+
+                    c: {
+                        title: "Վիտամին C",
+                        subtitle: "Կոլագեն • Հյուսվածքներ • Երկաթի յուրացում",
+                        function: "Մասնակցում է կոլագենի առաջացմանը, հյուսվածքների վերականգնմանը և երկաթի յուրացմանը։",
+                        sources: "Ցիտրուսային մրգեր, կիվի, հատապտուղներ, քաղցր պղպեղ, կաղամբ և բրոկոլի։",
+                        deficiency: "Խիստ պակասի դեպքում կարող է զարգանալ լնդախտ, թուլություն և լնդերի խնդիրներ։",
+                        important: "Ջրալույծ վիտամին է։"
+                    },
+
+                    d: {
+                        title: "Վիտամին D",
+                        subtitle: "Կալցիում • Ֆոսֆոր • Ոսկրեր",
+                        function: "Կարգավորում է կալցիումի և ֆոսֆորի փոխանակությունը և կարևոր է ոսկրերի ու ատամների համար։",
+                        sources: "Ճարպոտ ձուկ, ձվի դեղնուց, հարստացված սնունդ։ Օրգանիզմը կարող է D վիտամին ստանալ նաև արևի լույսի ազդեցությամբ։",
+                        deficiency: "Երեխաների մոտ արտահայտված պակասը կարող է կապված լինել ռախիտի և ոսկրերի ձևավորման խանգարման հետ։",
+                        important: "Ճարպալույծ վիտամին է։"
+                    },
+
+                    e: {
+                        title: "Վիտամին E",
+                        subtitle: "Բջիջների պաշտպանություն",
+                        function: "Օգնում է պաշտպանել բջիջները օքսիդատիվ վնասումից և կարևոր է օրգանիզմի բնականոն գործունեության համար։",
+                        sources: "Ընկույզներ, սերմեր, բուսական յուղեր և կանաչ տերևավոր բանջարեղեն։",
+                        deficiency: "Պակասը հազվադեպ է, սակայն արտահայտված պակասը կարող է ազդել նյարդային համակարգի և մկանների վրա։",
+                        important: "Ճարպալույծ վիտամին է։"
+                    },
+
+                    k: {
+                        title: "Վիտամին K",
+                        subtitle: "Արյան մակարդում",
+                        function: "Կարևոր դեր ունի արյան բնականոն մակարդման գործընթացում։",
+                        sources: "Կանաչ տերևավոր բանջարեղեն, կաղամբ, բրոկոլի և այլ կանաչ բույսեր։",
+                        deficiency: "Պակասի դեպքում կարող է խանգարվել արյան բնականոն մակարդումը։",
+                        important: "Ճարպալույծ վիտամին է։"
+                    }
+
+                }
+
+            },
+
+
+            /* =========================
+               RUSSIAN
+            ========================= */
+
+            ru: {
+
+                navHome: "Главная",
+                navAbout: "Витамины",
+                navQuiz: "Тест",
+
+                badge: "Академический проект 100/100",
+
+                homeDescription:
+                    "Интерактивный образовательный сайт о строении, классификации, значении и роли витаминов в организме человека.",
+
+                aboutTitle: "Витамины",
+
+                aboutSubtitle:
+                    "Основная информация о витаминах",
+
+                theoryTitle: "Что такое витамины?",
+
+                theoryText:
+                    "Витамины — это органические соединения различного строения, необходимые организму в очень небольших количествах.",
+
+                historyTitle: "История",
+
+                historyText:
+                    "Витамины были открыты русским врачом Н. И. Луниным в XIX веке, а название «витамины» предложил польский учёный К. Функ.",
+
+                waterTitle: "Водорастворимые витамины",
+
+                waterText:
+                    "К водорастворимым относятся витамины группы B и витамин C.",
+
+                fatTitle: "Жирорастворимые витамины",
+
+                fatText:
+                    "К жирорастворимым относятся витамины A, D, E и K.",
+
+                roleLabel: "РОЛЬ",
+
+                roleTitle: "Значение витаминов",
+
+                roleText:
+                    "Витамины в очень небольших количествах участвуют в обмене углеводов, липидов и других веществ, их переносе, а также входят в состав некоторых белков, ферментов и гормонов.",
+
+                deficiencyLabel: "НЕДОСТАТОК",
+
+                deficiencyTitle: "Недостаток витаминов",
+
+                deficiencyText:
+                    "При недостатке витаминов могут развиваться различные заболевания: цинга, куриная слепота, бери-бери, рахит и другие нарушения обмена веществ.",
+
+                back: "Назад",
+
+                function: "Функция",
+
+                sources: "Источники",
+
+                deficiency: "Недостаток",
+
+                important: "Важно",
+
+                quizTitle: "Тест по витаминам",
+
+                quizSubtitle: "Проверь свои знания",
+
+                next: "Следующий вопрос",
+
+                result: "Результат",
+
+                restart: "Начать заново",
+
+                correct: "Правильно",
+
+                wrong: "Неправильно",
+
+                scoreText: "Ты набрал",
+
+                of: "из 15",
+
+                questions: [
+
+                    {
+                        q: "Кто открыл витамины?",
+                        a: ["Н. И. Лунин", "К. Функ", "Роберт Гук"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Кто предложил название «витамины»?",
+                        a: ["Н. И. Лунин", "К. Функ", "Левенгук"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Какой витамин является водорастворимым?",
+                        a: ["A", "C", "D"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Какие витамины являются жирорастворимыми?",
+                        a: ["B и C", "A, D, E и K", "Только C"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Участвуют ли витамины в обмене веществ?",
+                        a: ["Да", "Нет", "Только витамин D"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Недостаток какого витамина связан с цингой?",
+                        a: ["C", "D", "K"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Какой витамин важен для свертывания крови?",
+                        a: ["A", "K", "E"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Какой витамин важен для костей?",
+                        a: ["D", "C", "K"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Являются ли витамины главным источником энергии?",
+                        a: ["Да", "Нет", "Только витамины B"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Откуда человек получает много витаминов?",
+                        a: ["Из пищи", "Только из воды", "Только из воздуха"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Какие витамины относятся к группе B?",
+                        a: ["B1, B2, B6, B12", "A1, A2", "D1, D2"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Может ли недостаток витаминов вызывать заболевания?",
+                        a: ["Да", "Нет", "Только у детей"],
+                        c: 0
+                    },
+
+                    {
+                        q: "С недостатком какого витамина связан рахит?",
+                        a: ["D", "C", "B"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Участвуют ли витамины в росте человека?",
+                        a: ["Да", "Нет", "Только витамин C"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Нужны ли витамины организму в небольших количествах?",
+                        a: ["Да", "Нет", "Только витамин A"],
+                        c: 0
+                    }
+                ],
+
+                vitamins: {
+
+                    a: {
+                        title: "Витамин A",
+                        subtitle: "Зрение • Рост • Кожа",
+                        function: "Поддерживает нормальное зрение, рост и здоровье кожи.",
+                        sources: "Морковь, тыква, яйца, молочные продукты, печень и зелёные овощи.",
+                        deficiency: "При недостатке могут возникать проблемы со зрением, особенно при слабом освещении.",
+                        important: "Жирорастворимый витамин."
+                    },
+
+                    b: {
+                        title: "Витамин B",
+                        subtitle: "Обмен веществ • Нервная система • Кровь",
+                        function: "Витамины группы B участвуют в обмене веществ, поддерживают работу нервной системы и кроветворение.",
+                        sources: "Мясо, рыба, яйца, молочные продукты, цельнозерновые продукты, бобовые и орехи.",
+                        deficiency: "Последствия недостатка зависят от конкретного витамина группы B и могут затрагивать обмен веществ, нервную систему или кроветворение.",
+                        important: "Витамины группы B являются водорастворимыми."
+                    },
+
+                    c: {
+                        title: "Витамин C",
+                        subtitle: "Коллаген • Ткани • Усвоение железа",
+                        function: "Участвует в образовании коллагена, восстановлении тканей и усвоении железа.",
+                        sources: "Цитрусовые, киви, ягоды, сладкий перец, капуста и брокколи.",
+                        deficiency: "При выраженном недостатке может развиться цинга, слабость и проблемы с дёснами.",
+                        important: "Водорастворимый витамин."
+                    },
+
+                    d: {
+                        title: "Витамин D",
+                        subtitle: "Кальций • Фосфор • Кости",
+                        function: "Участвует в обмене кальция и фосфора и важен для костей и зубов.",
+                        sources: "Жирная рыба, яичный желток, обогащённые продукты. Организм также может образовывать витамин D под воздействием солнечного света.",
+                        deficiency: "Выраженный недостаток у детей может быть связан с рахитом и нарушением формирования костей.",
+                        important: "Жирорастворимый витамин."
+                    },
+
+                    e: {
+                        title: "Витамин E",
+                        subtitle: "Защита клеток",
+                        function: "Помогает защищать клетки от окислительного повреждения и необходим для нормальной работы организма.",
+                        sources: "Орехи, семена, растительные масла и зелёные листовые овощи.",
+                        deficiency: "Недостаток встречается редко, но выраженный дефицит может влиять на нервную систему и мышцы.",
+                        important: "Жирорастворимый витамин."
+                    },
+
+                    k: {
+                        title: "Витамин K",
+                        subtitle: "Свертывание крови",
+                        function: "Играет важную роль в нормальном процессе свертывания крови.",
+                        sources: "Зелёные листовые овощи, капуста, брокколи и другие зелёные растения.",
+                        deficiency: "При недостатке может нарушаться нормальное свертывание крови.",
+                        important: "Жирорастворимый витамин."
+                    }
+
+                }
+
+            },
+
+
+            /* =========================
+               ENGLISH
+            ========================= */
+
+            en: {
+
+                navHome: "Home",
+                navAbout: "Vitamins",
+                navQuiz: "Quiz",
+
+                badge: "Academic 100/100 Project",
+
+                homeDescription:
+                    "An interactive educational website about the structure, classification, importance and role of vitamins in the human body.",
+
+                aboutTitle: "Vitamins",
+
+                aboutSubtitle:
+                    "Basic information about vitamins",
+
+                theoryTitle: "What are vitamins?",
+
+                theoryText:
+                    "Vitamins are organic compounds with different structures that are needed by the body in very small amounts.",
+
+                historyTitle: "History",
+
+                historyText:
+                    "Vitamins were discovered by Russian doctor N. I. Lunin in the 19th century, while the term “vitamins” was proposed by Polish scientist C. Funk.",
+
+                waterTitle: "Water-soluble vitamins",
+
+                waterText:
+                    "B-group vitamins and vitamin C are water-soluble.",
+
+                fatTitle: "Fat-soluble vitamins",
+
+                fatText:
+                    "Vitamins A, D, E and K are fat-soluble.",
+
+                roleLabel: "ROLE",
+
+                roleTitle: "Importance of vitamins",
+
+                roleText:
+                    "Vitamins participate in the metabolism of carbohydrates, lipids and other substances, their transport, and are components of some proteins, enzymes and hormones.",
+
+                deficiencyLabel: "DEFICIENCY",
+
+                deficiencyTitle: "Vitamin deficiency",
+
+                deficiencyText:
+                    "Vitamin deficiency can lead to various diseases, including scurvy, night blindness, beriberi, rickets and other metabolic disorders.",
+
+                back: "Back",
+
+                function: "Function",
+
+                sources: "Sources",
+
+                deficiency: "Deficiency",
+
+                important: "Important",
+
+                quizTitle: "Vitamin Quiz",
+
+                quizSubtitle: "Test your knowledge",
+
+                next: "Next question",
+
+                result: "Result",
+
+                restart: "Restart",
+
+                correct: "Correct",
+
+                wrong: "Wrong",
+
+                scoreText: "You scored",
+
+                of: "out of 15",
+
+                questions: [
+
+                    {
+                        q: "Who discovered vitamins?",
+                        a: ["N. I. Lunin", "C. Funk", "Robert Hooke"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Who proposed the term “vitamins”?",
+                        a: ["N. I. Lunin", "C. Funk", "Leeuwenhoek"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Which vitamin is water-soluble?",
+                        a: ["A", "C", "D"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Which vitamins are fat-soluble?",
+                        a: ["B and C", "A, D, E and K", "Only C"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Do vitamins participate in metabolism?",
+                        a: ["Yes", "No", "Only vitamin D"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Deficiency of which vitamin is associated with scurvy?",
+                        a: ["C", "D", "K"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Which vitamin is important for blood clotting?",
+                        a: ["A", "K", "E"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Which vitamin is important for bones?",
+                        a: ["D", "C", "K"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Are vitamins the main source of energy?",
+                        a: ["Yes", "No", "Only B vitamins"],
+                        c: 1
+                    },
+
+                    {
+                        q: "Where does a person get many vitamins?",
+                        a: ["From food", "Only from water", "Only from air"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Which vitamins belong to the B group?",
+                        a: ["B1, B2, B6, B12", "A1, A2", "D1, D2"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Can vitamin deficiency cause diseases?",
+                        a: ["Yes", "No", "Only in children"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Deficiency of which vitamin is associated with rickets?",
+                        a: ["D", "C", "B"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Do vitamins participate in human growth?",
+                        a: ["Yes", "No", "Only vitamin C"],
+                        c: 0
+                    },
+
+                    {
+                        q: "Does the body need vitamins in small amounts?",
+                        a: ["Yes", "No", "Only vitamin A"],
+                        c: 0
+                    }
+                ],
+
+                vitamins: {
+
+                    a: {
+                        title: "Vitamin A",
+                        subtitle: "Vision • Growth • Skin",
+                        function: "Supports normal vision, growth and healthy skin.",
+                        sources: "Carrots, pumpkin, eggs, dairy products, liver and green vegetables.",
+                        deficiency: "Deficiency can cause vision problems, especially in low-light conditions.",
+                        important: "Fat-soluble vitamin."
+                    },
+
+                    b: {
+                        title: "Vitamin B",
+                        subtitle: "Metabolism • Nervous system • Blood",
+                        function: "B vitamins participate in metabolism and support the nervous system and blood formation.",
+                        sources: "Meat, fish, eggs, dairy products, whole grains, legumes and nuts.",
+                        deficiency: "The effects depend on the specific B vitamin and may affect metabolism, the nervous system or blood formation.",
+                        important: "B-group vitamins are water-soluble."
+                    },
+
+                    c: {
+                        title: "Vitamin C",
+                        subtitle: "Collagen • Tissues • Iron absorption",
+                        function: "Participates in collagen formation, tissue repair and iron absorption.",
+                        sources: "Citrus fruits, kiwi, berries, sweet peppers, cabbage and broccoli.",
+                        deficiency: "Severe deficiency can cause scurvy, weakness and gum problems.",
+                        important: "Water-soluble vitamin."
+                    },
+
+                    d: {
+                        title: "Vitamin D",
+                        subtitle: "Calcium • Phosphorus • Bones",
+                        function: "Helps regulate calcium and phosphorus metabolism and is important for bones and teeth.",
+                        sources: "Fatty fish, egg yolk and fortified foods. The body can also produce vitamin D when exposed to sunlight.",
+                        deficiency: "Severe deficiency in children can be associated with rickets and impaired bone formation.",
+                        important: "Fat-soluble vitamin."
+                    },
+
+                    e: {
+                        title: "Vitamin E",
+                        subtitle: "Cell protection",
+                        function: "Helps protect cells from oxidative damage and is important for normal body functions.",
+                        sources: "Nuts, seeds, vegetable oils and leafy green vegetables.",
+                        deficiency: "Deficiency is uncommon, but severe deficiency can affect the nervous system and muscles.",
+                        important: "Fat-soluble vitamin."
+                    },
+
+                    k: {
+                        title: "Vitamin K",
+                        subtitle: "Blood clotting",
+                        function: "Plays an important role in normal blood clotting.",
+                        sources: "Leafy green vegetables, cabbage, broccoli and other green plants.",
+                        deficiency: "Deficiency can interfere with normal blood clotting.",
+                        important: "Fat-soluble vitamin."
+                    }
+
+                }
+
+            }
+
+        };
+
+
+        /* =========================================================
+           STATE
+        ========================================================= */
+
+        let currentLanguage = "hy";
+        let currentVitamin = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+
+        /* =========================================================
+           CHANGE LANGUAGE
+        ========================================================= */
+
+        function changeLanguage(lang) {
+
+            if (!translations[lang]) {
+                lang = "hy";
+            }
+
+            currentLanguage = lang;
+
+            document.documentElement.lang = lang;
+
+            const t = translations[lang];
+
+            document.querySelectorAll("[data-i18n]").forEach(element => {
+
+                const key = element.getAttribute("data-i18n");
+
+                if (t[key] !== undefined) {
+                    element.textContent = t[key];
+                }
+
+            });
+
+
+            document.querySelectorAll(".lang-btn").forEach(button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.lang === lang
+                );
+
+            });
+
+
+            if (currentVitamin) {
+                renderVitamin(currentVitamin);
+            }
+
+            if (
+                document.getElementById("quiz").classList.contains("active")
+            ) {
+                renderQuiz();
+            }
+        }
+
+
+        /* =========================================================
+           LANGUAGE BUTTONS
+        ========================================================= */
+
+        document.querySelectorAll(".lang-btn").forEach(button => {
+
+            button.addEventListener("click", () => {
+                changeLanguage(button.dataset.lang);
+            });
+
+        });
+
+
+        /* =========================================================
+           SHOW PAGE
+        ========================================================= */
+
+        function showPage(pageId, button = null) {
+
+            document.querySelectorAll(".page").forEach(page => {
+                page.classList.remove("active");
+            });
+
+            const page = document.getElementById(pageId);
+
+            if (page) {
+                page.classList.add("active");
+            }
+
+
+            document.querySelectorAll(".nav-btn").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+
+            if (button) {
+                button.classList.add("active");
+            }
+            else {
+
+                const matchingButton = document.querySelector(
+                    `.nav-btn[onclick*="'${pageId}'"]`
+                );
+
+                if (matchingButton) {
+                    matchingButton.classList.add("active");
+                }
+
+            }
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+
+        /* =========================================================
+           OPEN VITAMIN
+        ========================================================= */
+
+        function openVitamin(letter, button) {
+
+            currentVitamin = letter;
+
+            if (button) {
+
+                button.classList.remove("rotate");
+
+                void button.offsetWidth;
+
+                button.classList.add("rotate");
+
+            }
+
+            showPage("vitaminPage");
+
+            renderVitamin(letter);
+        }
+
+
+        /* =========================================================
+           RENDER VITAMIN
+        ========================================================= */
+
+        function renderVitamin(letter) {
+
+            const t = translations[currentLanguage];
+
+            if (!t || !t.vitamins || !t.vitamins[letter]) {
+                return;
+            }
+
+            const vitamin = t.vitamins[letter];
+
+            const background = {
+
+                a: "#f4d7ad",
+                b: "#e7b9a8",
+                c: "#f5df9a",
+                d: "#f7cf76",
+                e: "#b9d4b4",
+                k: "#a9d8d0"
+
+            }[letter];
+
+
+            document.getElementById("vitaminContent").innerHTML = `
+
+        <div
+            class="vitamin-header"
+            style="background:${background};"
+        >
+
+            <div class="vitamin-symbol">
+                ${letter.toUpperCase()}
+            </div>
+
+            <div>
+
+                <h1 class="vitamin-title">
+                    ${vitamin.title}
+                </h1>
+
+                <p class="vitamin-subtitle">
+                    ${vitamin.subtitle}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="info-grid">
+
+            <div class="info-card">
+
+                <h3>
+                    <i class="fa-solid fa-dna"></i>
+                    ${t.function}
+                </h3>
+
+                <p>
+                    ${vitamin.function}
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <h3>
+                    <i class="fa-solid fa-carrot"></i>
+                    ${t.sources}
+                </h3>
+
+                <p>
+                    ${vitamin.sources}
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <h3>
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    ${t.deficiency}
+                </h3>
+
+                <p>
+                    ${vitamin.deficiency}
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <h3>
+                    <i class="fa-solid fa-circle-info"></i>
+                    ${t.important}
+                </h3>
+
+                <p>
+                    ${vitamin.important}
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+        }
+
+
+        /* =========================================================
+           QUIZ
+        ========================================================= */
+
+        function renderQuiz() {
+
+            const t = translations[currentLanguage];
+
+            const quizBox = document.getElementById("quizBox");
+
+            if (!quizBox) {
+                return;
+            }
+
+
+            if (currentQuestion >= t.questions.length) {
+
+                const percent = Math.round(
+                    (score / t.questions.length) * 100
+                );
+
+                quizBox.innerHTML = `
+
+            <div class="result">
+
+                <i
+                    class="fa-solid fa-trophy"
+                    style="font-size:55px;color:#a7f3d0;"
+                ></i>
+
+                <h2 style="font-size:30px;font-weight:900;">
+                    ${t.result}
+                </h2>
+
+                <div class="result-score">
+                    ${score}/15
+                </div>
+
+                <p style="color:#9ca3af;">
+                    ${t.scoreText} ${score} ${t.of}
+                </p>
+
+                <p style="color:#a7f3d0;font-weight:800;">
+                    ${percent}%
+                </p>
+
+                <button
+                    class="restart-btn"
+                    onclick="restartQuiz()"
+                >
+                    ${t.restart}
+                </button>
+
+            </div>
+
+        `;
+
+                return;
+            }
+
+
+            const question = t.questions[currentQuestion];
+
+            quizBox.innerHTML = `
+
+        <div class="question-number">
+            ${currentQuestion + 1} / ${t.questions.length}
+        </div>
+
+        <div class="question">
+            ${question.q}
+        </div>
+
+        <div id="answers">
+
+            ${question.a.map((answer, index) => `
+
+                <button
+                    class="answer"
+                    onclick="selectAnswer(${index})"
+                >
+                    ${answer}
+                </button>
+
+            `).join("")}
+
+        </div>
+
+        <button
+            id="nextButton"
+            class="next-btn"
+            onclick="nextQuestion()"
+            style="display:none;"
+        >
+            ${t.next}
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+    `;
+        }
+
+
+        /* =========================================================
+           SELECT ANSWER
+        ========================================================= */
+
+        function selectAnswer(index) {
+
+            if (answered) {
+                return;
+            }
+
+            answered = true;
+
+            const t = translations[currentLanguage];
+
+            const question = t.questions[currentQuestion];
+
+            const buttons = document.querySelectorAll(".answer");
+
+
+            buttons.forEach((button, i) => {
+
+                button.disabled = true;
+
+                if (i === question.c) {
+                    button.classList.add("correct");
+                }
+
+                if (
+                    i === index &&
+                    i !== question.c
+                ) {
+                    button.classList.add("wrong");
+                }
+
+            });
+
+
+            if (index === question.c) {
+                score++;
+            }
+
+
+            document.getElementById("nextButton").style.display = "inline-block";
+        }
+
+
+        /* =========================================================
+           NEXT QUESTION
+        ========================================================= */
+
+        function nextQuestion() {
+
+            if (!answered) {
+                return;
+            }
+
+            currentQuestion++;
+
+            answered = false;
+
+            renderQuiz();
+        }
+
+
+        /* =========================================================
+           RESTART
+        ========================================================= */
+
+        function restartQuiz() {
+
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+
+            renderQuiz();
+
+        }
+
+
+        /* =========================================================
+           INITIALIZATION
+        ========================================================= */
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            changeLanguage("hy");
+
+            renderQuiz();
+
+        });
+
+    </script>
+
+</body>
+
+</html>
